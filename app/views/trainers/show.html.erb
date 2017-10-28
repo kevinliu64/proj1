@@ -1,3 +1,26 @@
 <h3>Trainer</h3>
 <p>Name: <%= @trainer.name if @trainer.name %></p>
 <p>Email: <%= @trainer.email if @trainer.email %></p>
+<% @trainer.pokemons.each do |pokemon| %> 
+<% if pokemon.health > 0 or current_trainer.id == @trainer.id %>
+  Name: <%= pokemon.name %> HP: <%= pokemon.health %> Level : <%= pokemon.level %>
+  <div class="dropdown">
+    <button class="dropbtn button small">Damage!</button>
+      <div class="dropdown-content">
+        <% current_trainer.pokemons.each do |p| %>
+          <%= link_to p.name, damage_path(id: pokemon, attacker_id: p.id), method: :patch, id: p.id.to_s, class: "attack" %>
+        <% end %>
+      </div>
+  </div>
+
+  <% if current_trainer.id == @trainer.id%>
+    <%= link_to "Heal!", heal_path(id: pokemon), class: "button small", method: :patch %>
+  <% end %>
+
+  <br>
+  <% end %>
+<% end %>
+
+<% if current_trainer.id == @trainer.id %>
+  <%= link_to "New Pokemon", pokemons_new_path, class: "button small" %>
+<% end %>
